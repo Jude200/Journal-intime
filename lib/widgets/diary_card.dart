@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flu/models/diary.dart';
 import 'package:flutter_flu/screens/modifyDiary.dart';
-import 'package:flutter_flu/services/sqflite_gestionAppData.dart';
+import 'package:flutter_flu/services/sqflite_helperDiary.dart';
+import 'package:flutter_flu/widgets/home.dart';
 import 'package:get/get.dart';
 
 class DiaryCard extends StatefulWidget {
@@ -29,29 +33,38 @@ class _DiaryCardState extends State<DiaryCard> {
         color: Colors.red,
         child: Row(
           children: [
-            Icon(Icons.delete_outline, color: Colors.white),
-            Text("Supprimer"),
+            SizedBox(width: 20),
+            Icon(Icons.delete_outline, color: Colors.white, size: 30),
+            Text("Supprimer",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
-      confirmDismiss: (i) {
-        return Get.defaultDialog(
-            textConfirm: "Oui",
-            textCancel: "Non",
-            middleText: "Voulez-vous supprimer cet article ?",
-            onConfirm: () {},
-            onCancel: () {});
+      secondaryBackground: Container(color: Colors.transparent),
+      confirmDismiss: (direction) async {
+        bool res = false;
+        if (direction == DismissDirection.startToEnd) {
+          await Get.defaultDialog(
+              onConfirm: () async {
+                print("mlmlmmml");
+                await sqfLiteDiaryData.delete(widget.diary.id);
+                res = true;
+                Get.back();
+              },
+              middleText: "Voulez-vous supprimer ce journal ?",
+              textConfirm: "Supprimer",
+              textCancel: "Annuler",
+              buttonColor: Colors.transparent,
+              confirmTextColor: Colors.green);
+        }
+        return res;
       },
       key: Key(widget.diary.titre),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        Authentification(diary: widget.diary)));
+            Get.to(() => Authentification(diary: widget.diary));
           },
           child: Card(
             elevation: 05.5,
@@ -59,11 +72,12 @@ class _DiaryCardState extends State<DiaryCard> {
               padding: EdgeInsets.all(15),
               child: Row(
                 children: [
-                  Container(
-                    child: CircleAvatar(
-                        backgroundImage: AssetImage(widget.diary.image),
-                        radius: 30),
-                  ),
+                  if (widget.diary.image != null)
+                    Container(
+                      width: 70,
+                      height: 70,
+                      child: Image.file(File(widget.diary.image)),
+                    ),
                   SizedBox(width: 15),
                   Expanded(
                     child: Column(

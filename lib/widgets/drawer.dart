@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flu/screens/setting.dart';
+import 'package:get/get.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
@@ -20,8 +21,7 @@ class AppDrawer extends StatelessWidget {
               color: Colors.white70,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AppSetting()));
+                  Get.to(() => AppSetting());
                 },
                 child: Row(
                   children: [
@@ -30,8 +30,7 @@ class AppDrawer extends StatelessWidget {
                         child: Icon(Icons.settings)),
                     Container(
                         child: Text("Paramètre",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18)))
+                            style: TextStyle(fontWeight: FontWeight.bold)))
                   ],
                 ),
               ),
@@ -44,8 +43,7 @@ class AppDrawer extends StatelessWidget {
                       padding: EdgeInsets.all(20), child: Icon(Icons.star)),
                   Container(
                       child: Text("Notez l'application",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)))
+                          style: TextStyle(fontWeight: FontWeight.bold)))
                 ],
               ),
             ),
@@ -58,8 +56,7 @@ class AppDrawer extends StatelessWidget {
                       child: Icon(Icons.account_balance_outlined)),
                   Container(
                       child: Text("A propos",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)))
+                          style: TextStyle(fontWeight: FontWeight.bold)))
                 ],
               ),
             ),
@@ -72,8 +69,7 @@ class AppDrawer extends StatelessWidget {
                       child: Icon(Icons.contact_mail)),
                   Container(
                       child: Text("Nous contactez",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)))
+                          style: TextStyle(fontWeight: FontWeight.bold)))
                 ],
               ),
             )

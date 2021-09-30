@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flu/models/diary.dart';
 import 'package:flutter_flu/widgets/diary_card.dart';
-import 'package:flutter_flu/services/sqflite_gestionAppData.dart';
+import 'package:flutter_flu/services/sqflite_helperDiary.dart';
 
 class MyNews extends StatefulWidget {
   const MyNews({Key key}) : super(key: key);
@@ -17,7 +17,7 @@ class _MyNewsState extends State<MyNews> {
   SqfLiteDiaryData sqfLiteDiaryData = SqfLiteDiaryData();
 
   Future getDiary() async {
-    List<Diary> diary = await sqfLiteDiaryData.getAllContact();
+    List<Diary> diary = await sqfLiteDiaryData.getAllDiary();
     print(diary);
     setState(() {
       myDiary = diary;

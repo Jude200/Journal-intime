@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_flu/models/diary.dart';
+import 'package:flutter_flu/services/dateformat.dart';
 import 'package:flutter_flu/widgets/flushBar.dart';
-import 'package:flutter_flu/services/sqflite_gestionAppData.dart';
+import 'package:flutter_flu/services/sqflite_helperDiary.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Authentification extends StatefulWidget {
@@ -34,6 +35,11 @@ class _AuthentificationState extends State<Authentification> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -50,13 +56,43 @@ class _AuthentificationState extends State<Authentification> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (widget.diary != null)
+                        if (widget.diary.image != null)
+                          Image.file(File(widget.diary.image)),
+                      if (image != null) Image.file(File(image)),
                       Container(
-                          child: widget.diary != null
-                              ? Image.asset(widget.diary.image)
-                              : ElevatedButton.icon(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.image),
-                                  label: Text("Ajouter une image"))),
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        margin: EdgeInsets.symmetric(vertical: 20),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            ElevatedButton.icon(
+                                onPressed: () async {
+                                  await getImage(ImageSource.gallery);
+                                  print(image);
+                                  setState(() {
+                                    if (widget.diary != null) {
+                                      widget.diary.image = image;
+                                      print("Pop" + widget.diary.image);
+                                    }
+                                  });
+                                },
+                                icon: Icon(Icons.image_outlined),
+                                label: Text("Impoter une image")),
+                            SizedBox(width: 20),
+                            ElevatedButton.icon(
+                                onPressed: () {
+                                  getImage(ImageSource.camera);
+                                  print(image);
+                                },
+                                icon: Icon(Icons.camera),
+                                label: Text("Prendre une photo")),
+                          ],
+                        ),
+                      ),
+                      Text(formatDate(DateTime.now().toString()),
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         child: TextFormField(
@@ -84,11 +120,12 @@ class _AuthentificationState extends State<Authentification> {
                           initialValue:
                               widget.diary != null ? widget.diary.body : "",
                           decoration: InputDecoration(
+                            hintText: "Message ... ",
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(07.5),
                                 borderSide: BorderSide(color: Colors.blue)),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(07.5),
                                 borderSide: BorderSide(color: Colors.green)),
                           ),
                           validator: (value) {
@@ -108,7 +145,9 @@ class _AuthentificationState extends State<Authentification> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                print(widget.diary.id);
+                              },
                               icon: Icon(Icons.close),
                               label: Text("Annuler")),
                           ElevatedButton.icon(
@@ -122,19 +161,24 @@ class _AuthentificationState extends State<Authentification> {
                                 if (b) {
                                   _formKey.currentState.save();
                                   Diary newDiary = Diary(
-                                    titre: titre == null ? " " : titre,
-                                    body: body,
-                                    date: DateTime.now().toString(),
-                                    image: "assets/images/defaultImage.png",
-                                  );
+                                      id: widget.diary == null
+                                          ? null
+                                          : widget.diary.id,
+                                      titre: titre == null ? " " : titre,
+                                      body: body,
+                                      date:
+                                          formatDate(DateTime.now().toString()),
+                                      image: widget.diary == null
+                                          ? image
+                                          : widget.diary.image);
                                   if (widget.diary == null) {
                                     await data.insert(newDiary);
-                                    flushBarAdd(context);
+                                    await flushBarAdd(context);
                                   } else {
                                     await data.update(newDiary);
+                                    await flushBarUpdate(context);
                                   }
 
-                                  flushBarAdd(context);
                                   Navigator.pop(context);
                                 }
                               },

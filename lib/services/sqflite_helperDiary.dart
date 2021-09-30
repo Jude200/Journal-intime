@@ -17,7 +17,7 @@ class SqfLiteDiaryData {
             titre text not null,
             body text not null,
             date text not  null,
-            image text not null
+            image text
           ) ''');
     });
   }
@@ -25,10 +25,11 @@ class SqfLiteDiaryData {
   Future<Diary> insert(Diary diary) async {
     await open();
     diary.id = await dataBaseDiary.insert(tdiaryData, diary.toMap());
+    print(diary.id);
     return diary;
   }
 
-  Future<Diary> getContact(int id) async {
+  Future<Diary> getDiary(int id) async {
     await open();
     List<Map<String, dynamic>> maps = await dataBaseDiary.query(
       tdiaryData,
@@ -42,7 +43,7 @@ class SqfLiteDiaryData {
     return null;
   }
 
-  Future<List<Diary>> getAllContact() async {
+  Future<List<Diary>> getAllDiary() async {
     await open();
     List<Map<String, dynamic>> maps = await dataBaseDiary?.query(tdiaryData);
     return maps.map((diaryMap) => Diary.fromMap(diaryMap)).toList();
@@ -63,6 +64,8 @@ class SqfLiteDiaryData {
       where: 'id = ?',
       whereArgs: [diary.id],
     );
+    await close();
+    print(diary.id);
     return a;
   }
 
