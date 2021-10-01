@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
 
-bool isLoading = true;
-
-double width(_) {
-  return MediaQuery.of(_).size.width;
-}
-
-double height(_) {
-  return MediaQuery.of(_).size.height;
-}
-
 /// Recuperation des données de la base de donnée pour le demarage de l'application
 
 List<Color> backgroundColor = [
