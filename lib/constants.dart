@@ -1,14 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_flu/screens/About.dart';
+import 'package:flutter_flu/screens/authentification.dart';
+import 'package:flutter_flu/screens/setting.dart';
+import 'package:get/get.dart';
 
-/// Recuperation des données de la base de donnée pour le demarage de l'application
-
-List<Color> backgroundColor = [
-  //Couleur avec avec couleur de police blanche
-  Color(0XFF4140FF),
-  Color(0XFF080226),
-  Color(0XFF9F28FF),
-  //Couleur avec avec couleur de police noire
-  Color(0XFFFF7729),
-  Color(0XFFFFFFFF), // blanche
-  Color(0XFF3AF7FF)
-];
+Map<String, dynamic> items = {
+  "Synchroniser vos journaux": Authentification(),
+  "Parametre": AppSetting(),
+  "A propos": AppAbout(),
+};

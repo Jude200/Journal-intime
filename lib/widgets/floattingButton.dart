@@ -12,6 +12,6 @@ class FloattingButton extends StatelessWidget {
               context, MaterialPageRoute(builder: (context) => widget));
         },
         // backgroundColor: Colors.red,
-        child: Icon(Icons.edit));
+        child: Icon(Icons.add));
   }
 }

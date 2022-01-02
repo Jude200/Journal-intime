@@ -18,7 +18,6 @@ class _MyNewsState extends State<MyNews> {
 
   Future getDiary() async {
     List<Diary> diary = await sqfLiteDiaryData.getAllDiary();
-    print(diary);
     setState(() {
       myDiary = diary;
       myDiaryCount = diary.length;
@@ -35,9 +34,14 @@ class _MyNewsState extends State<MyNews> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      if (isLoading) Center(child: CircularProgressIndicator()),
+      if (isLoading)
+        Container(
+            margin: EdgeInsets.only(top: 30),
+            child: Center(child: CircularProgressIndicator())),
       if (!isLoading && myDiaryCount == 0)
-        Center(child: Text("Aucun journal enrégistré")),
+        Container(
+            margin: EdgeInsets.only(top: 30),
+            child: Center(child: Text("Aucun journal enrégistré "))),
       if (!isLoading && myDiaryCount != 0)
         Expanded(
           child: Container(

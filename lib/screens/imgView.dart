@@ -10,9 +10,25 @@ class ImgView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [Hero(tag: diary.date, child: Image.file(File(diary.image)))],
-      ),
+      body: Center(
+          child: Hero(
+              tag: diary.date,
+              child: Stack(
+                alignment: AlignmentDirectional.bottomEnd,
+                children: [
+                  Image.file(File(diary.image)),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      diary.titre,
+                      maxLines: 2,
+                      textAlign: TextAlign.right,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ))),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flu/models/appData.dart';
+import 'package:flutter_flu/screens/password_page.dart';
 import 'package:flutter_flu/services/sqfliteSettingData.dart';
 import 'package:get/get.dart';
 
@@ -18,32 +19,14 @@ class _AppSettingState extends State<AppSetting> {
   double sliderInitvalue = 0.5;
   bool switchValueMode = false;
   bool switchValuePassword = false;
-  static const policeTheme = [
-    "Acme",
-    "Barrio",
-    "Aguafina_Script",
-    "Pinyon_Script",
-    "Pirata_One"
-  ];
 
-  List<ListTile> _policeThemeListTile = policeTheme
-      .map((e) => ListTile(
-          onTap: () {},
-          subtitle: Text(e),
-          title: Text(
-            e,
-            style: TextStyle(fontFamily: e),
-          )))
-      .toList();
   Future<void> getDataSetting() async {
     AppData a = await _sqfLiteSettingData.getData(1);
-    b = await _sqfLiteSettingData.getAllDiary();
+
     setState(() {
       appData = a;
-      sliderInitvalue = appData.fontSize / 100;
       switchValueMode = appData.darkMode;
       switchValuePassword = appData.islock;
-      print(appData.darkMode);
     });
   }
 
@@ -64,32 +47,6 @@ class _AppSettingState extends State<AppSetting> {
             Container(
                 margin: EdgeInsets.all(15),
                 child: Text("Paramètre", style: TextStyle(fontSize: 30))),
-            ExpansionTile(
-              title: Text(
-                "Police",
-                //  style: TextStyle(color: Colors.white),
-              ),
-              children: _policeThemeListTile,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Taille", style: TextStyle(fontWeight: FontWeight.bold)),
-                Slider(
-                    value: sliderInitvalue,
-                    divisions: 100,
-                    label: "${(sliderInitvalue * 100).toInt()}",
-                    onChangeEnd: (i) async {
-                      appData.fontSize = (100 * i).toInt();
-                      await _sqfLiteSettingData.update(appData);
-                    },
-                    onChanged: (i) {
-                      setState(() {
-                        sliderInitvalue = i;
-                      });
-                    }),
-              ],
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -102,9 +59,8 @@ class _AppSettingState extends State<AppSetting> {
                         switchValueMode = i;
                         appData.darkMode = i;
                       });
-                      Get.changeTheme(Get.isDarkMode
-                          ? ThemeData.light()
-                          : ThemeData.dark());
+                      Get.changeTheme(
+                          !i ? ThemeData.light() : ThemeData.dark());
                       await _sqfLiteSettingData.update(appData);
                     }),
               ],
@@ -121,10 +77,34 @@ class _AppSettingState extends State<AppSetting> {
                         switchValuePassword = i;
                         appData.islock = i;
                       });
+                      if (i == true && appData.password == null) {
+                        Get.to(() => Passwordpage());
+                      }
                       await _sqfLiteSettingData.update(appData);
                     }),
               ],
             ),
+            Row(
+              children: [
+                TextButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.transparent)),
+                  onPressed: () async {
+                    print(appData.password);
+                    if (appData.islock) {
+                      Get.to(() => Passwordpage(ischange: true));
+                    }
+                  },
+                  child: Text("Changer le mot de passe",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              appData.islock == false ? Colors.black54 : null)),
+                ),
+              ],
+            )
           ]),
         ),
       ),

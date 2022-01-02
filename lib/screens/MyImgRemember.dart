@@ -54,7 +54,7 @@ class _MyImgRememberState extends State<MyImgRemember> {
                   return SizedBox(height: 20);
                 },
                 itemCount: diaryListCount),
-          )
+          ),
       ],
     );
   }

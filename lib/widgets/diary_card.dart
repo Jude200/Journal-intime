@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flu/models/diary.dart';
 import 'package:flutter_flu/screens/modifyDiary.dart';
 import 'package:flutter_flu/services/sqflite_helperDiary.dart';
-import 'package:flutter_flu/widgets/home.dart';
 import 'package:get/get.dart';
 
 class DiaryCard extends StatefulWidget {
@@ -46,7 +45,6 @@ class _DiaryCardState extends State<DiaryCard> {
         if (direction == DismissDirection.startToEnd) {
           await Get.defaultDialog(
               onConfirm: () async {
-                print("mlmlmmml");
                 await sqfLiteDiaryData.delete(widget.diary.id);
                 res = true;
                 Get.back();
@@ -76,7 +74,9 @@ class _DiaryCardState extends State<DiaryCard> {
                     Container(
                       width: 70,
                       height: 70,
-                      child: Image.file(File(widget.diary.image)),
+                      child: Hero(
+                          child: Image.file(File(widget.diary.image)),
+                          tag: widget.diary.date),
                     ),
                   SizedBox(width: 15),
                   Expanded(
@@ -85,11 +85,15 @@ class _DiaryCardState extends State<DiaryCard> {
                       children: [
                         Container(
                             child: Text(widget.diary.titre,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(fontWeight: FontWeight.bold))),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 08),
                           child: Container(
-                              child: Text(widget.diary.body, maxLines: 1)),
+                              child: Text(widget.diary.body,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis)),
                         ),
                         Container(child: Text(widget.diary.date)),
                       ],

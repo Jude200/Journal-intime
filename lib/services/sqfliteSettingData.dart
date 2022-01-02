@@ -16,8 +16,9 @@ class SqfLiteSettingData {
             id integer primary key autoincrement,
             darkMode integer not null,
             police text,
-            fontSize integer,
-            islock integer not null
+            islock integer not null,
+            password text,
+            passwordIndicator text
           ) ''');
     });
   }
