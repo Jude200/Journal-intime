@@ -62,7 +62,12 @@ class _DiaryCardState extends State<DiaryCard> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: GestureDetector(
           onTap: () {
-            Get.to(() => Authentification(diary: widget.diary));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        Authentification(diary: widget.diary)));
+           // Get.to(() => Authentification(diary: widget.diary));
           },
           child: Card(
             elevation: 05.5,

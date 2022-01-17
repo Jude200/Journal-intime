@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flu/models/diary.dart';
 import 'package:flutter_flu/screens/imgView.dart';
-import 'package:get/route_manager.dart';
 
 class ImgRemember extends StatelessWidget {
   final Diary diary;
@@ -17,7 +16,12 @@ class ImgRemember extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           GestureDetector(
-              onTap: () => Get.to(() => ImgView(diary: diary)),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ImgView(
+                            diary: diary,
+                          ))),
               child: Hero(
                   tag: diary.date,
                   child:

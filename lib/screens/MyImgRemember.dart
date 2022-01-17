@@ -37,7 +37,7 @@ class _MyImgRememberState extends State<MyImgRemember> {
     return ListView(
       children: [
         if (isSearching) CircularProgressIndicator(),
-        if (!isSearching && diaryListCount == 0) Text("Pas de photo souvenir"),
+        if (!isSearching && diaryListCount == 0) Center(child: Text("Pas de photo souvenir")),
         if (!isSearching && diaryListCount != 0)
           Container(
             width: MediaQuery.of(context).size.width,

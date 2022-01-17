@@ -17,6 +17,12 @@ class AuthentificationHelper {
     await Flushbar(message: message).show(context);
   }
 
+  progress() {
+    Flushbar(
+      messageText: CircularProgressIndicator(),
+    );
+  }
+
   void loading() {
     showDialog(
         context: context,
@@ -73,7 +79,13 @@ class AuthentificationHelper {
   }
 
   Future<void> signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    var googleUser;
+    try {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    } catch (e) {
+      print("Google sign : ");
+        print(e);
+    }
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
     final credential = GoogleAuthProvider.credential(
@@ -82,6 +94,14 @@ class AuthentificationHelper {
     );
     await FirebaseAuth.instance.signInWithCredential(credential);
   }
+
+  Future<void> handleSignIn() async {
+  try {
+    await _googleSignIn.signIn();
+  } catch (error) {
+    print(error);
+  }
+}
 
   Future<void> signOut() async {
     Future.wait([

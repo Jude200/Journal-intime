@@ -47,24 +47,24 @@ class _AppSettingState extends State<AppSetting> {
             Container(
                 margin: EdgeInsets.all(15),
                 child: Text("Paramètre", style: TextStyle(fontSize: 30))),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Mode Nuit",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                Switch(
-                    value: switchValueMode,
-                    onChanged: (i) async {
-                      setState(() {
-                        switchValueMode = i;
-                        appData.darkMode = i;
-                      });
-                      Get.changeTheme(
-                          !i ? ThemeData.light() : ThemeData.dark());
-                      await _sqfLiteSettingData.update(appData);
-                    }),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text("Mode Nuit",
+            //         style: TextStyle(fontWeight: FontWeight.bold)),
+            //     Switch(
+            //         value: switchValueMode,
+            //         onChanged: (i) async {
+            //           setState(() {
+            //             switchValueMode = i;
+            //             appData.darkMode = i;
+            //           });
+            //           Get.changeTheme(
+            //               !i ? ThemeData.light() : ThemeData.dark());
+            //           await _sqfLiteSettingData.update(appData);
+            //         }),
+            //   ],
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -78,7 +78,11 @@ class _AppSettingState extends State<AppSetting> {
                         appData.islock = i;
                       });
                       if (i == true && appData.password == null) {
-                        Get.to(() => Passwordpage());
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Passwordpage()));
+                        //  Get.to(() => Passwordpage());
                       }
                       await _sqfLiteSettingData.update(appData);
                     }),
@@ -93,15 +97,22 @@ class _AppSettingState extends State<AppSetting> {
                   onPressed: () async {
                     print(appData.password);
                     if (appData.islock) {
-                      Get.to(() => Passwordpage(ischange: true));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Passwordpage(
+                                    ischange: true,
+                                  )));
+                      //  Get.to(() => Passwordpage(ischange: true));
                     }
                   },
                   child: Text("Changer le mot de passe",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color:
-                              appData.islock == false ? Colors.black54 : null)),
+                          color: appData?.islock == false
+                              ? Colors.black54
+                              : null)),
                 ),
               ],
             )

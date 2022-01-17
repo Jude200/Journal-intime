@@ -23,6 +23,7 @@ class FirstPage extends StatelessWidget {
           floatingActionButton: FloattingButton(widget: Authentification()),
           appBar: AppBar(
             automaticallyImplyLeading: false,
+            
             title: Text("Life Journal"),
             bottom: TabBar(tabs: [
               Tab(child: Text("Mes journaux")),

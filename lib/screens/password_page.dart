@@ -183,7 +183,9 @@ class _PasswordpageState extends State<Passwordpage> {
                       !widget.ischange ? passwordVerify : password;
                   appData.passwordIndicator = passwordIndicator;
                   await _sqfLiteSettingData.update(appData);
-                  Get.off(() => Home());
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => Home()));
+                  // Get.off(() => Home());
                   if (widget.ischange)
                     Flushbar(
                       title: "Password",
